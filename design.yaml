@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filter-reading-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: filter-reading
+  template:
+    metadata:
+      labels:
+        app: filter-reading
+    spec:
+      containers:
+        - image: $FILTER_IMAGE
+          name: filter-reading
+          env:
+            - name: GCP_PROJECT
+              value: $PROJECT
+            - name: FILTER_SUB_ID
+              value: smartmeter-ahmad-filter-sub
+            - name: TOPIC_NAME
+              value: smartmeter-ahmad
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: convert-reading-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: convert-reading
+  template:
+    metadata:
+      labels:
+        app: convert-reading
+    spec:
+      containers:
+        - image: $CONVERT_IMAGE
+          name: convert-reading
+          env:
+            - name: GCP_PROJECT
+              value: $PROJECT
+            - name: CONVERT_SUB_ID
+              value: smartmeter-ahmad-convert-sub
+            - name: TOPIC_NAME
+              value: smartmeter-ahmad
